@@ -34,5 +34,4 @@ public final class Guard {
     private Guard() {
         throw new AssertionError();
     }
-
 }
