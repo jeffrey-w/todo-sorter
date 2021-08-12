@@ -2,13 +2,29 @@ package com.todos;
 
 import java.util.Objects;
 
-public final class Todo implements Cloneable {
+/**
+ * The {@code Todo} class specifies properties and operations on a single item of a {@code TodoList}.
+ * 
+ * @author Jeff Wilgus
+ * @version 1.0
+ * @see TodoList
+ */
+public final class Todo {
+
+    /**
+     * Creates a new {@code Todo} with the specified {@code name}.
+     * 
+     * @param name the identifier for the new {@code Todo}
+     * @return a new {@code Todo}
+     * @throws IllegalArgumentException if the specified {@code name} is the empty string
+     * @throws NullPointerException if the specified {@code name} is {@code null}
+     */
     public static Todo create(String name) {
         return new Todo(name, 0);
     }
 
     private final String name;
-    private int rank;
+    private final int rank;
 
     private Todo(String name, int rank) {
         this.name = Guard.againstEmptyString(
@@ -17,25 +33,31 @@ public final class Todo implements Cloneable {
         this.rank = Guard.againstNegative(rank, "rank is negative.");
     }
 
-    @Override
-    public Todo clone() {
-        try {
-            return (Todo)super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new InternalError(e);
-        }
-    }
-
+    /**
+     * Provides the identifier of this {@code Todo}.
+     * 
+     * @return this {@code Todo}'s name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Provides the priority of this {@code Todo}.
+     * 
+     * @return this {@code Todo}'s rank
+     */
     public int getRank() {
         return rank;
     }
 
-    public void increment() {
-        rank++;
+    /**
+     * Provides a new {@code Todo} with a rank that is one greater than this {@code Todo}.
+     * 
+     * @return a new {@code Todo}
+     */
+    public Todo increment() {
+        return new Todo(name, rank + 1);
     }
 
     @Override

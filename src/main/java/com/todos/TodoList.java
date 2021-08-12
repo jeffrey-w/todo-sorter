@@ -3,9 +3,10 @@ package com.todos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class TodoList implements Cloneable {
+public final class TodoList {
     public static List<TodoList> listsFrom(Collection<Todo> todos) {
         TodoList list = new TodoList(List.copyOf(todos));
         return list.stratify();
@@ -21,7 +22,7 @@ public final class TodoList implements Cloneable {
         return todos;
     }
 
-    private List<Todo> todos;
+    private final List<Todo> todos;
 
     private TodoList(List<Todo> todos) {
         this.todos = new ArrayList<>(Guard.againstNullElements(
@@ -29,21 +30,16 @@ public final class TodoList implements Cloneable {
                 "todos contains null elements."));
     }
 
-    @Override
-    public TodoList clone() {
-        try {
-            TodoList clone = (TodoList)super.clone();
-            clone.todos = clone.todos.stream().map(todo -> todo.clone())
-                .toList();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new InternalError(e);
-        }
-    }
-
     public List<TodoList> stratify() { // TODO rename this
         return todos.stream().collect(Collectors.groupingBy(Todo::getRank, Collectors.toList()))
             .values().stream().map(list -> new TodoList(list)).toList();
+    }
+
+    public TodoList incrementAt(int index) {
+        Objects.checkIndex(index, todos.size());
+        List<Todo> todos = new ArrayList<>(this.todos);
+        todos.set(index, todos.get(index).increment());
+        return new TodoList(todos);
     }
 
     public Todo get(int index) {
