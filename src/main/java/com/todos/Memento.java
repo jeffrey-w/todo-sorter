@@ -10,8 +10,7 @@ public final class Memento {
     private final int inner;
 
     public Memento(List<TodoList> lists, int cursor, int outer, int inner) {
-        this.lists = new ArrayList<>(lists.stream()
-            .map(list -> list.clone()).toList());
+        this.lists = new ArrayList<>(lists);
         this.cursor = cursor;
         this.outer = outer;
         this.inner = inner;
