@@ -2,23 +2,25 @@ package com.todos;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class Driver {
-    private static Reader IN = System.console().reader();
-    private static Set<Character> VALID_INPUT = Set.of('1', '2', 'U', 'u');
+    private static Scanner IN = new Scanner(System.in);
+    private static Set<String> VALID_INPUT = Set.of("1", "2", "U", "u");
     private static Stack<Memento> HISTORY = new Stack<>();
     private static Sorter SORTER;
+    private static Comparator<Todo> RANK_COMPARATOR = (one, two) ->
+        Integer.compare(two.getRank(), one.getRank());
 
     private static final int EX_USAGE = 64;
     private static final int EX_DARAERR = 65;
-    private static final int EX_IOERR = 74;
 
     public static void main(String[] args) {
         try {
@@ -28,11 +30,19 @@ public class Driver {
         }
         while (!SORTER.isSorted()) {
             while (SORTER.hasNext()) {
-                Todo current = SORTER.getCurrent();
-                Todo next = SORTER.getNext();
-                chooseBetween(current, next);
+                if (!SORTER.isCurrentListSingleton()) {
+                    Todo current = SORTER.getCurrent();
+                    Todo next = SORTER.getNext();
+                    chooseBetween(current, next);
+                } else {
+                    SORTER.advance();
+                }
             }
             SORTER = new Sorter(TodoList.merge(SORTER.getLists()));
+        }
+        int index = 1;
+        for (Todo todo : GetSortedTodos()) {
+            System.out.println(index++ + ". " + todo.getName());
         }
     }
     
@@ -51,38 +61,41 @@ public class Driver {
 
     private static void chooseBetween(Todo one, Todo two) {
         System.out.print("Would you rather [1] " + one.getName() + " or [2] " + two.getName() + "? ");
-        char input = tryGetInput();
-        if (input == 'U' || input == 'u') {
-            SORTER.restore(HISTORY.pop());
+        String input = tryGetInput();
+        if (input.equalsIgnoreCase("U")) {
+            try {
+                SORTER.restore(HISTORY.pop());
+            } catch (EmptyStackException e) {
+                System.out.println("Cannot undo, you are at the beginning of the list.");
+            }
         }
         else {
-            if (input == '1') {
-                one.increment();
-            } else {
-                two.increment();
-            }
             HISTORY.push(SORTER.save());
+            if (input.equals("1")) {
+                SORTER.incrementOuter();
+            } else {
+                SORTER.incrementInner();
+            }
             SORTER.advance();
         }
     }
 
-    private static char tryGetInput() {
-        char input = 0;
+    private static String tryGetInput() {
+        String input;
         boolean isNotValid = true;
         do {
-            try {
-                input = (char)IN.read();
-                IN.read();
-            } catch (IOException e) {
-                error("FATAL ERROR: could not read input.", EX_IOERR);
-            }
-            if (!VALID_INPUT.contains(input)) {
-                System.out.print("Please select either [1] or [2]: ");
-            } else {
+            input = IN.next();
+            if (VALID_INPUT.contains(input)) {
                 isNotValid = false;
+            } else {
+                System.out.print("Please select either [1] or [2]: ");
             }
         } while (isNotValid);
         return input;
+    }
+
+    private static Iterable<Todo> GetSortedTodos() {
+        return TodoList.merge(SORTER.getLists()).stream().sorted(RANK_COMPARATOR).collect(Collectors.toList());
     }
 
     private static void error(String message, int exitCode) {
@@ -90,4 +103,3 @@ public class Driver {
         System.exit(exitCode);
     }
 }
- 
