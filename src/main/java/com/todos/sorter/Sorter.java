@@ -8,6 +8,7 @@ import com.todos.todo.Todo;
 import com.todos.todo.TodoList;
 
 public final class Sorter {
+    
     private List<TodoList> lists;
     private int cursor;
     private int outer;
@@ -27,7 +28,7 @@ public final class Sorter {
     }
 
     public List<TodoList> getLists() {
-        return lists;
+        return new ArrayList<>(lists);
     }
 
     public void incrementOuter() {

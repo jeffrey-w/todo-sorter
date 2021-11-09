@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TodoListTest {
+    
     private static List<Todo> TODOS = List.of(Todo.create("TEST_ONE"), Todo.create("TEST_TWO"));
 
     private TodoList list;

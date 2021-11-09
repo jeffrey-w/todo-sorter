@@ -26,13 +26,13 @@ public final class Todo {
     }
 
     private final String name;
-    private final int rank;
+    private final int priority;
 
     private Todo(String name, int rank) {
         this.name = Guard.againstEmptyString(
             Guard.againstNull(name, "name is null."),
                 "name is empty.");
-        this.rank = Guard.againstNegative(rank, "rank is negative.");
+        this.priority = Guard.againstNegative(rank, "rank is negative.");
     }
 
     /**
@@ -49,8 +49,8 @@ public final class Todo {
      * 
      * @return this {@code Todo}'s rank
      */
-    public int getRank() {
-        return rank;
+    public int getPriority() {
+        return priority;
     }
 
     /**
@@ -59,7 +59,7 @@ public final class Todo {
      * @return a new {@code Todo}
      */
     public Todo increment() {
-        return new Todo(name, rank + 1);
+        return new Todo(name, priority + 1);
     }
 
     @Override
@@ -68,17 +68,17 @@ public final class Todo {
             return false;
         }
         Todo todo = (Todo)obj;
-        return rank == todo.rank && name.equals(todo.name);
+        return priority == todo.priority && name.equals(todo.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, rank);
+        return Objects.hash(name, priority);
     }
 
     @Override
     public String toString() {
-        return "name=" + name + " rank=" + rank;
+        return "name=" + name + " rank=" + priority;
     }
 
 }

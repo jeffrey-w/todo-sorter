@@ -6,6 +6,7 @@ import java.util.List;
 import com.todos.todo.TodoList;
 
 public final class Memento {
+    
     private final List<TodoList> lists;
     private final int cursor;
     private final int outer;

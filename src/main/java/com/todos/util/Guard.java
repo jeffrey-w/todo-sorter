@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.todos.todo.Todo;
 
 public final class Guard {
+    
     public static <T> T againstNull(T object, String message) {
         return Objects.requireNonNull(object, message);
     }

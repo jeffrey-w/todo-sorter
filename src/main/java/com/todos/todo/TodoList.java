@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.todos.util.Guard;
 
 public final class TodoList {
+    
     public static List<TodoList> listsFrom(Collection<Todo> todos) {
         TodoList list = new TodoList(List.copyOf(todos));
         return list.sort();
@@ -32,7 +33,7 @@ public final class TodoList {
     }
 
     public List<TodoList> sort() {
-        return todos.stream().collect(Collectors.groupingBy(Todo::getRank, Collectors.toList()))
+        return todos.stream().collect(Collectors.groupingBy(Todo::getPriority, Collectors.toList()))
             .values().stream().map(list -> new TodoList(list)).toList();
     }
 

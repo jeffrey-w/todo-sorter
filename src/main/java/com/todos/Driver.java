@@ -17,15 +17,16 @@ import com.todos.todo.Todo;
 import com.todos.todo.TodoList;
 
 public class Driver {
-    private static Scanner IN = new Scanner(System.in);
-    private static Set<String> VALID_INPUT = Set.of("1", "2", "U", "u");
-    private static Stack<Memento> HISTORY = new Stack<>();
-    private static Sorter SORTER;
-    private static Comparator<Todo> RANK_COMPARATOR = (one, two) ->
-        Integer.compare(two.getRank(), one.getRank());
 
     private static final int EX_USAGE = 64;
-    private static final int EX_DARAERR = 65;
+    private static final int EX_DATAERR = 65;
+    private static final Scanner IN = new Scanner(System.in);
+    private static final  Set<String> VALID_INPUT = Set.of("1", "2", "U", "u");
+    private static final  Stack<Memento> HISTORY = new Stack<>();
+    private static final  Comparator<Todo> RANK_COMPARATOR = (one, two) ->
+        Integer.compare(two.getPriority(), one.getPriority());
+    
+    private static Sorter SORTER;
 
     public static void main(String[] args) {
         try {
@@ -60,7 +61,7 @@ public class Driver {
             SORTER = new Sorter(todos);
 
         } catch (FileNotFoundException e) {
-            error("FATAL ERROR: cannot read file at " + path + ".", EX_DARAERR);
+            error("FATAL ERROR: cannot read file at " + path + ".", EX_DATAERR);
         }
     }
 
@@ -100,7 +101,9 @@ public class Driver {
     }
 
     private static Iterable<Todo> GetSortedTodos() {
-        return TodoList.merge(SORTER.getLists()).stream().sorted(RANK_COMPARATOR).collect(Collectors.toList());
+        return TodoList.merge(SORTER.getLists()).stream()
+            .sorted(RANK_COMPARATOR)
+            .collect(Collectors.toList());
     }
 
     private static void error(String message, int exitCode) {
