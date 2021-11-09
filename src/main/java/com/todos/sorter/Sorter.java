@@ -1,8 +1,11 @@
-package com.todos;
+package com.todos.sorter;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.todos.todo.Todo;
+import com.todos.todo.TodoList;
 
 public final class Sorter {
     private List<TodoList> lists;

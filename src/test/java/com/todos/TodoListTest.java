@@ -7,6 +7,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.todos.todo.Todo;
+import com.todos.todo.TodoList;
+
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,7 +1,9 @@
-package com.todos;
+package com.todos.util;
 
 import java.util.Collection;
 import java.util.Objects;
+
+import com.todos.todo.Todo;
 
 public final class Guard {
     public static <T> T againstNull(T object, String message) {

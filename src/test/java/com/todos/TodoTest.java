@@ -3,6 +3,8 @@ package com.todos;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
+import com.todos.todo.Todo;
+
 import org.junit.Test;
 
 public class TodoTest {

@@ -1,6 +1,8 @@
-package com.todos;
+package com.todos.todo;
 
 import java.util.Objects;
+
+import com.todos.util.Guard;
 
 /**
  * The {@code Todo} class specifies properties and operations on a single item of a {@code TodoList}.
