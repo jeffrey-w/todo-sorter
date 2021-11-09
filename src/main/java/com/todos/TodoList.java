@@ -3,13 +3,12 @@ package com.todos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class TodoList {
     public static List<TodoList> listsFrom(Collection<Todo> todos) {
         TodoList list = new TodoList(List.copyOf(todos));
-        return list.stratify();
+        return list.sort();
     }
 
     public static List<Todo> merge(Collection<TodoList> lists) {
@@ -30,13 +29,12 @@ public final class TodoList {
                 "todos contains null elements."));
     }
 
-    public List<TodoList> stratify() { // TODO rename this
+    public List<TodoList> sort() {
         return todos.stream().collect(Collectors.groupingBy(Todo::getRank, Collectors.toList()))
             .values().stream().map(list -> new TodoList(list)).toList();
     }
 
     public TodoList incrementAt(int index) {
-        Objects.checkIndex(index, todos.size());
         List<Todo> todos = new ArrayList<>(this.todos);
         todos.set(index, todos.get(index).increment());
         return new TodoList(todos);
