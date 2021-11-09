@@ -30,8 +30,8 @@ public class TodoListTest {
     @Test
     public void testStratify() {
         TodoList other = list.incrementAt(0);
-        List<TodoList> one = list.stratify();
-        List<TodoList> two = other.stratify();
+        List<TodoList> one = list.sort();
+        List<TodoList> two = other.sort();
         assertEquals(1, one.size()); 
         assertEquals(2, two.size());
     }
