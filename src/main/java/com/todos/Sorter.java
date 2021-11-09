@@ -1,5 +1,6 @@
 package com.todos;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,12 +27,24 @@ public final class Sorter {
         return lists;
     }
 
+    public void incrementOuter() {
+        List<TodoList> lists = new ArrayList<>(this.lists);
+        lists.set(cursor, lists.get(cursor).incrementAt(outer));
+        this.lists = lists;
+    }
+
+    public void incrementInner() {
+        List<TodoList> lists = new ArrayList<>(this.lists);
+        lists.set(cursor, lists.get(cursor).incrementAt(inner));
+        this.lists = lists;
+    }
+
     public void advance() {
         inner++;
-        if (inner == lists.get(cursor).size()) {
+        if (inner >= lists.get(cursor).size()) {
             outer++;
             inner = outer + 1;
-            if (outer == lists.get(cursor).size() - 1) {
+            if (outer >= lists.get(cursor).size() - 1) {
                 cursor++;
                 outer = 0;
                 inner = 1;
@@ -45,6 +58,10 @@ public final class Sorter {
 
     public boolean isSorted() {
         return lists.stream().allMatch(list -> list.size() == 1);
+    }
+
+    public boolean isCurrentListSingleton() {
+        return lists.get(cursor).size() == 1;
     }
 
     public Memento save() {
