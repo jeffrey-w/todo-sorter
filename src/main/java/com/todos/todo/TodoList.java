@@ -34,7 +34,7 @@ public final class TodoList {
 
     public List<TodoList> sort() {
         return todos.stream().collect(Collectors.groupingBy(Todo::getPriority, Collectors.toList()))
-            .values().stream().map(list -> new TodoList(list)).toList();
+            .values().stream().map(list -> new TodoList(list)).collect(Collectors.toList());
     }
 
     public TodoList incrementAt(int index) {
